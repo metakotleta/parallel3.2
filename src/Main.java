@@ -3,32 +3,24 @@ import java.util.Set;
 import java.util.concurrent.*;
 
 public class Main {
-    public static final long AWAIT_TIMEOUT = 5;
-
-    public static void main(String[] args) throws InterruptedException, ExecutionException {
-        Set<Future> ready = new HashSet<>();
-        ExecutorService exec = Executors.newFixedThreadPool(2);
-        ready.add(exec.submit(new Thread(null, () ->
-                new Shop(Shop.generateReceiptsArray(100000000, 10000)).
-                        setName("Магазин 1")
-                        .calculateCash())));
-        ready.add(exec.submit(new Thread(null, () ->
-                new Shop(Shop.generateReceiptsArray(100000000, 35000))
-                        .setName("Магазин 2")
-                        .calculateCash())));
-        ready.add(exec.submit(new Thread(null, () ->
-                new Shop(Shop.generateReceiptsArray(10000000, 15000))
-                        .setName("Магазин 3")
-                        .calculateCash())));
-        ready.add(exec.submit(new Thread(null, () ->
-                new Shop(Shop.generateReceiptsArray(10000000, 1000))
-                        .setName("Магазин 4")
-                        .calculateCash())));
+    public static final long SLEEP = 1000;
+    public static final int DIMENSION = 500000;
+    public static final int MAX_VALUE = 1000;
 
 
-        ready.stream().map(future -> future.get()).forEach(System.out::println);
+    public static void main(String[] args) throws InterruptedException {
+        ThreadGroup threads = new ThreadGroup("threads");
+
+        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+
+        while (threads.activeCount() > 0) {
+            Thread.sleep(SLEEP);
+        }
+
         System.out.println(Shop.getAdder().sum());
-        exec.shutdown();
 
     }
 }

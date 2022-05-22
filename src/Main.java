@@ -1,12 +1,7 @@
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.*;
-
 public class Main {
     public static final long SLEEP = 1000;
     public static final int DIMENSION = 500000;
     public static final int MAX_VALUE = 1000;
-
 
     public static void main(String[] args) throws InterruptedException {
         ThreadGroup threads = new ThreadGroup("threads");
@@ -21,6 +16,5 @@ public class Main {
         }
 
         System.out.println(Shop.getAdder().sum());
-
     }
 }

@@ -6,10 +6,9 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         ThreadGroup threads = new ThreadGroup("threads");
 
-        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
-        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
-        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
-        new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+        for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++) {
+            new Thread(threads, () -> new Shop(Shop.generateReceiptsArray(DIMENSION, MAX_VALUE)).calculateCash()).start();
+        }
 
         while (threads.activeCount() > 0) {
             Thread.sleep(SLEEP);
